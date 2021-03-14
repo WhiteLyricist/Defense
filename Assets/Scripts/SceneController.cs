@@ -47,6 +47,15 @@ public class SceneController : MonoBehaviour
         scoreText.text = "Счёт игры:  " + score.ToString();
         delay = UnitParameters.EnemyDelay;
         BaseUnit.OnDie += ChangeScore;
+        Hero.OnLose += LoseGame;
+    }
+
+    private void LoseGame() 
+    {
+        endGame.text = "К сожалению вы проиграли!";
+        Destroy(_defense);
+        StartCoroutine(EndGame());
+        SceneManager.LoadScene("Menu");
     }
 
     public void BackMenu() 
@@ -81,7 +90,7 @@ public class SceneController : MonoBehaviour
 
     public IEnumerator EndGame() 
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(5);
     }
 
     public IEnumerator CreateMob() 

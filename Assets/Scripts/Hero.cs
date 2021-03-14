@@ -8,11 +8,12 @@ using UnityEngine.UI;
 public class Hero : MonoBehaviour, IDamageable
 {
 
+    public static Action OnLose = delegate { };
+
     [SerializeField] private float health;
     [SerializeField] private float damage;
     [SerializeField] protected float attackSpeed = 0.1f;
 
-    [SerializeField] private Text endGame;
 
     [SerializeField] private HPBar _hpBar;
 
@@ -43,9 +44,9 @@ public class Hero : MonoBehaviour, IDamageable
     {
         health -= damage;
         _hpBar.UpdateHPBar(health, maxHealth);
-        if (health <= 0) 
-        {
-            endGame.text = "К сожалению вы проиграли!";
+        if (health <= 0)
+        { 
+            OnLose();
             StartCoroutine(EndGame());
             SceneManager.LoadScene("Menu");
             Destroy(gameObject);
