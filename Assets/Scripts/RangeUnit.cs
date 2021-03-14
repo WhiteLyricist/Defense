@@ -14,14 +14,14 @@ public class RangeUnit : BaseUnit
         _arrow.GetComponent<Projectile>().SetDamage(damage,"Hero",Vector2.zero);
     }
 
-
     public override void Move()
     {
         base.Move();
     }
 
-    void Start() 
+    protected override void Start() 
     {
+        base.Start();
         range = Vector3.Distance(transform.position, Vector2.zero) / 2;
     }
 

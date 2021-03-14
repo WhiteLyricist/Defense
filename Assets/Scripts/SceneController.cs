@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class SceneController : MonoBehaviour
 {
@@ -9,6 +11,13 @@ public class SceneController : MonoBehaviour
     [SerializeField] private GameObject bombPrefab;
     [SerializeField] private GameObject shooterPrefab;
     [SerializeField] private GameObject meleePrefab;
+
+    [SerializeField] private Text scoreText;
+    [SerializeField] private Text countWinsText;
+    [SerializeField] private Text endGame;
+
+    private int score=0;
+    private int countWins;
 
     private GameObject _defense;
     private GameObject _attacking;
@@ -33,7 +42,16 @@ public class SceneController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        
+        countWins = (int)PlayerPrefs.GetInt("CountWins", 0);
+        countWinsText.text = "Количество побед:  " + countWins.ToString();
+        scoreText.text = "Счёт игры:  " + score.ToString();
+        delay = UnitParameters.EnemyDelay;
+        BaseUnit.OnDie += ChangeScore;
+    }
+
+    public void BackMenu() 
+    {
+        SceneManager.LoadScene("Menu");
     }
 
     // Update is called once per frame
@@ -45,11 +63,32 @@ public class SceneController : MonoBehaviour
         }
     }
 
+    private void ChangeScore() 
+    {
+        score ++ ;
+        scoreText.text ="Счёт игры:  "+ score.ToString();
+        if (score == 100) 
+        {
+            countWins += 1;
+            endGame.text = "Поздравляю вы победили!";
+            PlayerPrefs.SetInt("CountWins", (int)countWins);
+            PlayerPrefs.Save();
+            Destroy(_defense);
+            StartCoroutine(EndGame());
+            SceneManager.LoadScene("Menu");
+        }
+    }
+
+    public IEnumerator EndGame() 
+    {
+        yield return new WaitForSeconds(3f);
+    }
+
     public IEnumerator CreateMob() 
     {
         selector = true;
-        delay = Random.Range(1f,3f);
         selectMob = Random.Range(1, 4);
+
         yield return new WaitForSeconds(delay);
 
         positionsMob = Random.Range(1, 5);

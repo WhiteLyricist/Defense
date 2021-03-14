@@ -10,8 +10,6 @@ public class Projectile : MonoBehaviour, IDamageable
     private string target;
     private Vector2 direction;
 
-    public static Action<float> OnGetDamage = delegate { };
-
     public void SetDamage(float d, string targetTag, Vector2 direct) 
     {
         damage = d;
@@ -41,7 +39,7 @@ public class Projectile : MonoBehaviour, IDamageable
 
     private IEnumerator Die() 
     {
-        yield return new WaitForSeconds(10f);
+        yield return new WaitForSeconds(7f);
 
         Destroy(gameObject);
     }

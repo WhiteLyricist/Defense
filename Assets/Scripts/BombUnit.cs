@@ -5,9 +5,9 @@ using UnityEngine;
 public class BombUnit : BaseUnit
 {
 
-    public override void SetParameters(float s, float d, float h)
+    public override void SetParameters()
     {
-        base.SetParameters(s, d, h);
+        base.SetParameters();
         speed *= 2;
         health /= 2;
         damage *= 2;
@@ -21,6 +21,8 @@ public class BombUnit : BaseUnit
     public override void Attack()
     {
         OnGetDamage(damage);
+        var _bang = Instantiate(bangPrefab) as GameObject;
+        _bang.transform.position = transform.position;
         Destroy(gameObject);
     }
 

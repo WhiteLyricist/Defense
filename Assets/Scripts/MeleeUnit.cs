@@ -5,11 +5,12 @@ using UnityEngine;
 public class MeleeUnit : BaseUnit
 {
 
-    public override void SetParameters(float s, float d, float h)
+    public override void SetParameters()
     {
-        base.SetParameters(s, d, h);
+        base.SetParameters();
         speed /= 2;
         health *= 2;
+        _hpBar.UpdateHPBar(health, maxHealth);
     }
 
     public override void Move()

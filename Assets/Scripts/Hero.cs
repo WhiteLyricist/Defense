@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class Hero : MonoBehaviour, IDamageable
 {
@@ -10,25 +12,48 @@ public class Hero : MonoBehaviour, IDamageable
     [SerializeField] private float damage;
     [SerializeField] protected float attackSpeed = 0.1f;
 
+    [SerializeField] private Text endGame;
+
+    [SerializeField] private HPBar _hpBar;
+
+    private float maxHealth;
+
+    Animator _anim;
+
     protected float cooldown;
 
     [SerializeField] protected GameObject arrowPrefab;
 
 
+    public virtual void SetParameters()
+    {
+        damage = UnitParameters.HeroDamage;
+        maxHealth = UnitParameters.HeroHealth;
+        health = maxHealth;
+    }
+
     private void Start()
     {
         BaseUnit.OnGetDamage += GetDamage;
-        Projectile.OnGetDamage += GetDamage;
+        _anim = gameObject.GetComponent<Animator>();
+        SetParameters();
     }
 
-    void GetDamage(float damage) 
+    public void GetDamage(float damage) 
     {
-        Debug.Log("GetDamage");
         health -= damage;
+        _hpBar.UpdateHPBar(health, maxHealth);
         if (health <= 0) 
         {
+            endGame.text = "К сожалению вы проиграли!";
+            StartCoroutine(EndGame());
+            SceneManager.LoadScene("Menu");
             Destroy(gameObject);
         }
+    }
+    public IEnumerator EndGame()
+    {
+        yield return new WaitForSeconds(3f);
     }
 
     private void Update()
@@ -39,6 +64,7 @@ public class Hero : MonoBehaviour, IDamageable
         }
         if (Input.GetMouseButton(0)) 
         {
+            _anim.SetInteger("Defender", 1);
             if (cooldown <= 0)
             {
                 var _arrow = Instantiate(arrowPrefab) as GameObject;
@@ -51,11 +77,6 @@ public class Hero : MonoBehaviour, IDamageable
                 cooldown = attackSpeed;
             }
         }
-    }
-
-    void IDamageable.GetDamage(float damage)
-    {
-        Debug.Log("Еблыыыыыысь");
-        health -= damage;
+        else _anim.SetInteger("Defender", 0);
     }
 }

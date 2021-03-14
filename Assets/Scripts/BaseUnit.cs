@@ -8,21 +8,29 @@ public class BaseUnit : MonoBehaviour, IDamageable
 
     public static Action<float> OnGetDamage = delegate { };
 
+    public static Action OnDie = delegate { };
+
     [SerializeField] protected GameObject arrowPrefab;
+
+    [SerializeField] protected GameObject bangPrefab;
+
+    [SerializeField] protected HPBar _hpBar;
 
     [SerializeField] protected float speed;
     [SerializeField] protected float damage;
     [SerializeField] protected float health;
     [SerializeField] protected float range;
     [SerializeField] protected float attackSpeed=1f;
+
+    protected float maxHealth;
     protected float cooldown;
 
 
-    public virtual void SetParameters(float s, float d, float h) 
+    public virtual void SetParameters() 
     {
-        speed = s;
-        damage = d;
-        health = h;
+        damage = UnitParameters.EnemyDamage;
+        maxHealth = UnitParameters.EnemyHealth;
+        health = maxHealth;
     }
 
     public virtual void Move() 
@@ -55,9 +63,9 @@ public class BaseUnit : MonoBehaviour, IDamageable
     }
 
     // Start is called before the first frame update
-    void Start()
+    protected virtual void Start()
     {
-
+        SetParameters();
     }
 
     // Update is called once per frame
@@ -70,8 +78,14 @@ public class BaseUnit : MonoBehaviour, IDamageable
     {
         Debug.Log("Еблыыыыыысь");
         health -= damage;
+        Debug.Log(health);
+        Debug.Log(maxHealth);
+        _hpBar.UpdateHPBar(health, maxHealth);
         if (health <= 0) 
         {
+            var _bang = Instantiate(bangPrefab) as GameObject;
+            _bang.transform.position = transform.position;
+            OnDie();
             Destroy(gameObject);
         }
     }
