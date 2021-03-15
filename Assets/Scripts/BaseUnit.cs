@@ -76,7 +76,6 @@ public class BaseUnit : MonoBehaviour, IDamageable
 
     public void GetDamage(float damage)
     {
-        Debug.Log("Еблыыыыыысь");
         health -= damage;
         Debug.Log(health);
         Debug.Log(maxHealth);
@@ -85,8 +84,8 @@ public class BaseUnit : MonoBehaviour, IDamageable
         {
             var _bang = Instantiate(bangPrefab) as GameObject;
             _bang.transform.position = transform.position;
-            OnDie();
             Destroy(gameObject);
+            OnDie();
         }
     }
 }

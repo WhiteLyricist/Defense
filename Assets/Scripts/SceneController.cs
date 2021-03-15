@@ -55,7 +55,6 @@ public class SceneController : MonoBehaviour
         endGame.text = "К сожалению вы проиграли!";
         Destroy(_defense);
         StartCoroutine(EndGame());
-        SceneManager.LoadScene("Menu");
     }
 
     public void BackMenu() 
@@ -90,7 +89,9 @@ public class SceneController : MonoBehaviour
 
     public IEnumerator EndGame() 
     {
-        yield return new WaitForSeconds(5);
+        yield return new WaitForSeconds(2);
+
+        SceneManager.LoadScene("Menu");
     }
 
     public IEnumerator CreateMob() 

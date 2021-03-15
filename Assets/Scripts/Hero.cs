@@ -48,13 +48,14 @@ public class Hero : MonoBehaviour, IDamageable
         { 
             OnLose();
             StartCoroutine(EndGame());
-            SceneManager.LoadScene("Menu");
             Destroy(gameObject);
         }
     }
     public IEnumerator EndGame()
     {
-        yield return new WaitForSeconds(3f);
+        yield return new WaitForSeconds(2);
+
+        SceneManager.LoadScene("Menu");
     }
 
     private void Update()
