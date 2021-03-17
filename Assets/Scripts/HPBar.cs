@@ -17,7 +17,7 @@ public class HPBar : MonoBehaviour
         if (hp > 0)
         {
             var percent = hp / maxhp;
-            transform.localScale = new Vector2(startScale * percent, transform.localScale.y); ;
+            transform.localScale = new Vector2(startScale * percent, transform.localScale.y);
         }
         else transform.localScale = Vector2.zero;
     }

@@ -25,6 +25,11 @@ public class Hero : MonoBehaviour, IDamageable
 
     [SerializeField] protected GameObject arrowPrefab;
 
+    public void OnDestroy()
+    {
+        BaseUnit.OnGetDamage -= GetDamage;
+    }
+
 
     public virtual void SetParameters()
     {
@@ -48,14 +53,15 @@ public class Hero : MonoBehaviour, IDamageable
         { 
             OnLose();
             StartCoroutine(EndGame());
-            BaseUnit.OnGetDamage -= GetDamage;
-            Destroy(gameObject);
+           // BaseUnit.OnGetDamage -= GetDamage;
+           // Destroy(gameObject);
         }
     }
     public IEnumerator EndGame()
     {
         yield return new WaitForSeconds(2);
 
+        Destroy(gameObject);
         SceneManager.LoadScene("Menu");
     }
 

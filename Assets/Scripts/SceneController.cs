@@ -51,19 +51,23 @@ public class SceneController : MonoBehaviour
         Hero.OnLose += LoseGame;
     }
 
+    private void OnDestroy()
+    {
+        BaseUnit.OnDie -= ChangeScore;
+        Hero.OnLose -= LoseGame;
+    }
+
     private void LoseGame() 
     {
         endGame.text = "К сожалению вы проиграли!";
         Destroy(_defense);
-        BaseUnit.OnDie -= ChangeScore;
-        Hero.OnLose -= LoseGame;
         StartCoroutine(EndGame());
     }
 
     public void BackMenu() 
     {
-        BaseUnit.OnDie -= ChangeScore;
-        Hero.OnLose -= LoseGame;
+        Destroy(_defense);
+        Destroy(gameObject);
         SceneManager.LoadScene("Menu");
     }
 
@@ -87,8 +91,6 @@ public class SceneController : MonoBehaviour
             PlayerPrefs.SetInt("CountWins", (int)countWins);
             PlayerPrefs.Save();
             Destroy(_defense);
-            BaseUnit.OnDie -= ChangeScore;
-            Hero.OnLose -= LoseGame;
             StartCoroutine(EndGame());
         }
     }
@@ -96,6 +98,8 @@ public class SceneController : MonoBehaviour
     public IEnumerator EndGame() 
     {
         yield return new WaitForSeconds(2);
+
+        Destroy(gameObject);
 
         SceneManager.LoadScene("Menu");
     }
