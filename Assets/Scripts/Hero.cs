@@ -48,6 +48,7 @@ public class Hero : MonoBehaviour, IDamageable
         { 
             OnLose();
             StartCoroutine(EndGame());
+            BaseUnit.OnGetDamage -= GetDamage;
             Destroy(gameObject);
         }
     }

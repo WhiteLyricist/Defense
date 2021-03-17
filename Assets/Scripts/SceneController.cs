@@ -16,7 +16,7 @@ public class SceneController : MonoBehaviour
     [SerializeField] private Text countWinsText;
     [SerializeField] private Text endGame;
 
-    private int score=0;
+    private int score;
     private int countWins;
 
     private GameObject _defense;
@@ -42,6 +42,7 @@ public class SceneController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        score = 0;
         countWins = (int)PlayerPrefs.GetInt("CountWins", 0);
         countWinsText.text = "Количество побед:  " + countWins.ToString();
         scoreText.text = "Счёт игры:  " + score.ToString();
@@ -54,11 +55,15 @@ public class SceneController : MonoBehaviour
     {
         endGame.text = "К сожалению вы проиграли!";
         Destroy(_defense);
+        BaseUnit.OnDie -= ChangeScore;
+        Hero.OnLose -= LoseGame;
         StartCoroutine(EndGame());
     }
 
     public void BackMenu() 
     {
+        BaseUnit.OnDie -= ChangeScore;
+        Hero.OnLose -= LoseGame;
         SceneManager.LoadScene("Menu");
     }
 
@@ -82,8 +87,9 @@ public class SceneController : MonoBehaviour
             PlayerPrefs.SetInt("CountWins", (int)countWins);
             PlayerPrefs.Save();
             Destroy(_defense);
+            BaseUnit.OnDie -= ChangeScore;
+            Hero.OnLose -= LoseGame;
             StartCoroutine(EndGame());
-            SceneManager.LoadScene("Menu");
         }
     }
 

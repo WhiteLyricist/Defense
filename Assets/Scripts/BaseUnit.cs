@@ -77,15 +77,13 @@ public class BaseUnit : MonoBehaviour, IDamageable
     public void GetDamage(float damage)
     {
         health -= damage;
-        Debug.Log(health);
-        Debug.Log(maxHealth);
         _hpBar.UpdateHPBar(health, maxHealth);
         if (health <= 0) 
         {
             var _bang = Instantiate(bangPrefab) as GameObject;
             _bang.transform.position = transform.position;
             Destroy(gameObject);
-            OnDie();
+            OnDie();  
         }
     }
 }
